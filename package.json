@@ -7,6 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon Main.js"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "data/*.json"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Nageswari-droid/Freshworks-backend-problem.git"
@@ -26,5 +31,8 @@
   "homepage": "https://github.com/Nageswari-droid/Freshworks-backend-problem#readme",
   "devDependencies": {
     "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
