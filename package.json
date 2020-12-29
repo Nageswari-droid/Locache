@@ -1,20 +1,30 @@
 {
-  "name": "freshworks",
+  "name": "locache",
   "version": "1.0.0",
-  "description": "Create, Read, Delete operations in JSON file",
-  "main": "server.js",
+  "description": "Local storage with Create, Read and Delete operations",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon Main.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nageswari-droid/Freshworks-backend-problem.git"
+  },
+  "keywords": [
+    "create",
+    "read",
+    "delete",
+    "json",
+    "key-value"
+  ],
+  "author": "Nageswari",
   "license": "ISC",
-  "devDependencies": {
-    "express": "^4.17.1",
-    "nodemon": "^2.0.6",
-    "uuid": "^8.3.2"
+  "bugs": {
+    "url": "https://github.com/Nageswari-droid/Freshworks-backend-problem/issues"
   },
-  "dependencies": {
-    "locache": "file:DAO"
+  "homepage": "https://github.com/Nageswari-droid/Freshworks-backend-problem#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }
