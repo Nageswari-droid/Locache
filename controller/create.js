@@ -1,6 +1,9 @@
 const path = require("path");
 const uuid = require("uuid");
 const fs = require("fs");
+const { errorHandler } = require("../error/responseErr");
+// const { DataStore } = require("../DAO/dataStore");
+const { DataStore } = require("locache");
 
 const fileName = path.join(__dirname, "..", "data", "dataStore.json");
 
@@ -12,50 +15,63 @@ const fileName = path.join(__dirname, "..", "data", "dataStore.json");
  */
 const createController = (req, res, next) => {
   const userData = req.body;
-  const keyValue = uuid.v4();
+  const key = Object.keys(userData)[0];
+  const value = userData[key];
 
-  const size = Buffer.byteLength(JSON.stringify(userData));
-  var uuidStr = keyValue.substring(0, 32);
+  if (typeof value === "object") {
+    if (Object.keys(userData).length !== 0) {
+      const size = Buffer.byteLength(JSON.stringify(value));
+      if (key.length > 32) {
+        return errorHandler(res, "Key length should not exceed 32 characters");
+      }
+      if (size / 1000 < 16) {
+        if (fs.existsSync(fileName)) {
+          fs.readFile(fileName, "UTF-8", (err, data) => {
+            if (err) {
+              return errorHandler(res, err.message);
+            }
 
-  if (Object.keys(userData).length !== 0) {
-    if (size / 1000 < 16) {
-      if (fs.existsSync(fileName)) {
-        fs.readFile(fileName, "UTF-8", (err, data) => {
-          if (err) {
-            res.send("Error occured");
-          }
-
-          if (data.length === 0 || JSON.parse(data) === " ") {
-            writeHandler(
-              {
-                [uuidStr]: userData,
-              },
-              res
-            );
-          } else {
-            const parsedData = JSON.parse(data);
-            const { schema } = parsedData;
-            schema[uuidStr] = userData;
-            writeHandler(schema, res);
-          }
-        });
+            if (data.length === 0 || JSON.parse(data) === " ") {
+              writeHandler(
+                {
+                  [key]: value,
+                },
+                res
+              );
+            } else {
+              const parsedData = JSON.parse(data);
+              if (key in parsedData.schema) {
+                return errorHandler(
+                  res,
+                  "Key already exists!! Cannot create a value for already existing key.."
+                );
+              }
+              const { schema } = parsedData;
+              schema[key] = value;
+              writeHandler(schema, res);
+            }
+          });
+        } else {
+          writeHandler(
+            {
+              [key]: value,
+            },
+            res
+          );
+        }
       } else {
-        writeHandler(
-          {
-            [uuidStr]: userData,
-          },
-          res
-        );
+        return errorHandler(res, "JSON value should be less than 16KB");
       }
     } else {
-      return res.send("JSON value should be less than 16KB");
+      return errorHandler(res, "The input should be in key-value pair");
     }
   } else {
-    return res.send("Value should be in JSON");
+    return errorHandler(res, "Value should be in JSON");
   }
 };
 
 const writeHandler = (dataObj, res) => {
+  DataStore.ojectMember(dataObj);
   fs.writeFile(
     fileName,
     JSON.stringify({
@@ -63,11 +79,11 @@ const writeHandler = (dataObj, res) => {
     }),
     (err) => {
       if (err) {
-        return res.send("Error occured");
+        return errorHandler(res, err.message);
       }
     }
   );
-  res.send(dataObj);
+  errorHandler(res, "Data stored successfully!!");
 };
 
 exports.createController = createController;

@@ -1,0 +1,12 @@
+{
+  "name": "locache",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dataStore.js",
+  "scripts": {
+    "start": "nodemon dataStore.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
