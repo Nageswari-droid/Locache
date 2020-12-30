@@ -25,10 +25,28 @@ class Validate {
       );
     } else {
       if (key in parsedData.root) {
-        if(parsedData.root[key].expire){
-            return errorHandler("Key exceeded Time To Live");
+        if (parsedData.root[key].expire) {
+          return errorHandler("Key exceeded Time To Live");
         }
         return parsedData.root[key].value;
+      } else {
+        return errorHandler("Invalid key...");
+      }
+    }
+  }
+
+  static async deleteValidate(key, parsedData) {
+    if (parsedData === " ") {
+      return errorHandler(
+        "File is empty!! Create an object to perform delete operation..."
+      );
+    } else {
+      if (key in parsedData.root) {
+        if (parsedData.root[key].expire) {
+          return errorHandler("Key exceeded Time To Live");
+        } else {
+          return true;
+        }
       } else {
         return errorHandler("Invalid key...");
       }

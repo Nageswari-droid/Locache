@@ -8,8 +8,8 @@ class Main {
   static async read(key) {
     return await Operation.readOperation(key);
   }
-  static delete() {
-    Operation.deleteOperation();
+  static async delete(key) {
+    await Operation.deleteOperation(key);
   }
 }
 

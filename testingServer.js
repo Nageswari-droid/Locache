@@ -43,4 +43,18 @@ app.get("/read/:key", async (req, res) => {
   }
 });
 
+app.get("/delete/:key", async (req, res) => {
+  const key = req.params.key;
+  try {
+    await req.locache.delete(key);
+    res.status(201).json({
+      message : `${key} deleted successfully!`
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Failed to delete data",
+    });
+  }
+});
+
 app.listen(4200);

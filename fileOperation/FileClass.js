@@ -41,22 +41,30 @@ class FileClass {
           console.log(err);
           return "";
         });
-        if(typeof key === "string"){
-          const dataValid = await Validate.createValidate(key, value, data);
-          return dataValid;
-        }
-        else{
-          return data;
-        }
-    } else {
-      if(key && value){
-        return { [key]: { value: value, expire: false } };
+      if (typeof key === "string") {
+        const dataValid = await Validate.createValidate(key, value, data);
+        return dataValid;
+      } else {
+        return data;
       }
-      else{
+    } else {
+      if (key && value) {
+        return { [key]: { value: value, expire: false } };
+      } else {
         return errorHandler("File doesn't exists!!");
       }
     }
   }
+
+  static async deleteFile(deleteObj){
+    if (fs.existsSync(fileName)) {
+      await fs.promises
+        .writeFile(fileName, JSON.stringify(deleteObj, null, 2));
+      return "Deleted successfully!!"
+    } else {
+      return errorHandler("File doesn't exists!!");
+    }
+  };
 }
 
 exports.FileClass = FileClass;

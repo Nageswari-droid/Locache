@@ -9,8 +9,8 @@ class Operation{
     static async readOperation(key){
         return await readHandler(key);
     }
-    static deleteOperation(){
-        deleteHandler();
+    static async deleteOperation(key){
+        await deleteHandler(key);
     }
 }
 
