@@ -5,8 +5,8 @@ class Main {
   static async create(key, value, timeToLive) {
     await Operation.createOperation(key, value, timeToLive);
   }
-  static read() {
-    Operation.readOperation();
+  static async read(key) {
+    return await Operation.readOperation(key);
   }
   static delete() {
     Operation.deleteOperation();

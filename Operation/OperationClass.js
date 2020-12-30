@@ -6,8 +6,8 @@ class Operation{
     static async createOperation(key, value, timeToLive){
         await createHandler(key, value, timeToLive);
     }
-    static readOperation(){
-        readHandler();
+    static async readOperation(key){
+        return await readHandler(key);
     }
     static deleteOperation(){
         deleteHandler();
