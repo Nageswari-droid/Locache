@@ -10,12 +10,19 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/locachetest", (req, res) => {
+app.post("/locachetest", async (req, res) => {
   const { key, value, ttl } = req.body;
-  locache.create(key, value, ttl);
-  res.json({
-    message: "Data added to locache!",
-  });
+
+  try {
+    await locache.create(key, value, ttl);
+    res.status(201).json({
+      message: "Data added to locache!",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Failed to create new data",
+    });
+  }
 });
 
 app.listen(4200);

@@ -3,8 +3,8 @@ const { readHandler } = require("../Functions/readHandler");
 const { deleteHandler } = require("../Functions/deleteHandler");
 
 class Operation{
-    static createOperation(key, value, timeToLive){
-        createHandler(key, value, timeToLive);
+    static async createOperation(key, value, timeToLive){
+        await createHandler(key, value, timeToLive);
     }
     static readOperation(){
         readHandler();

@@ -1,14 +1,14 @@
 {
   "schema": {
-    "k2y216u1019": {
+    "Jake": {
       "value": {
-        "name": "new name"
+        "age": 21
       },
       "expire": false
     },
-    "k2y216u101qw9": {
+    "Amy": {
       "value": {
-        "name": "new name"
+        "age": 20
       },
       "expire": false
     }

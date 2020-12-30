@@ -2,7 +2,7 @@ class GlobalData {
   static dataStore = {};
 
   static addItem = (dataObj) => {
-    this.dataStore.root = dataObj;
+    this.dataStore.root = { ...this.dataStore.root, ...dataObj };
     console.log(JSON.stringify(this.dataStore, null, 2));
   };
 

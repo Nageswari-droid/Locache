@@ -1,9 +1,7 @@
 const path = require("path");
-const fs = require("fs");
 const { errorHandler } = require("../error/error");
+const { FileClass } = require("../fileOperation/FileClass");
 const { GlobalData } = require("../DAO/GlobalData");
-
-const fileName = path.join(__dirname, "..", "data", "dataStore.json");
 
 /**
  * Create key-value pair,
@@ -14,7 +12,7 @@ const fileName = path.join(__dirname, "..", "data", "dataStore.json");
  * @param {*} value
  * @param {*} timeToLive
  */
-const createHandler = (keyArg, valueArg, timeToLive) => {
+const createHandler = async (keyArg, valueArg, timeToLive) => {
   const key = keyArg;
   const value = valueArg;
 
@@ -22,61 +20,30 @@ const createHandler = (keyArg, valueArg, timeToLive) => {
 
   if (typeof key === "string") {
     if (typeof value === "object") {
-      if (key.length > 32) {
-        errorHandler("Key length should not exceed 32 characters!");
-      } else {
-        const size = Buffer.byteLength(JSON.stringify(value));
-        if (size / 1024 > 16) {
-          errorHandler("Value size should not exceed 16KB");
+      if (typeof lifeTime === "number") {
+        if (key.length > 32) {
+          return errorHandler("Key length should not exceed 32 characters");
         } else {
-          if (fs.existsSync(fileName)) {
-            fs.readFile(fileName, "UTF-8", (err, data) => {
-              if (data.length === 0 || JSON.parse(data) === " ") {
-                writeHandler({ [key]: { value: value, expire: false } });
-              } else {
-                const parsedData = JSON.parse(data);
-                if (key in parsedData.schema) {
-                  errorHandler(
-                    "Key already exists!! Cannot create a value for already existing key.."
-                  );
-                } else {
-                  const { schema } = parsedData;
-                  schema[key] = { value: value, expire: false };
-                  writeHandler(schema);
-                }
-              }
-            });
+          const size = Buffer.byteLength(JSON.stringify(value));
+          if (size / 1024 > 16) {
+            return errorHandler("Value size should not exceed 16KB");
           } else {
-            writeHandler({ [key]: { value: value, expire: false } });
+            GlobalData.addItem({ [key]: { value: value, expire: false } });
+            return await FileClass.writeFile(key, value, lifeTime).then(() => {
+              console.log("\n \nData stored successfully!!");
+              return "Data stored successfully!!";
+            });
           }
         }
+      } else {
+        return errorHandler("Time to live value should be an Integer!");
       }
     } else {
-      errorHandler("Value datatype should be object(JSON)");
+      return errorHandler("Value datatype should be an object(JSON)");
     }
   } else {
-    errorHandler("Key datatype should be string!");
+    return errorHandler("Key datatype should be string!");
   }
-};
-
-const writeHandler = (dataObj) => {
-  GlobalData.addItem(dataObj);
-  fs.writeFile(
-    fileName,
-    JSON.stringify(
-      {
-        schema: { ...dataObj },
-      },
-      null,
-      2
-    ),
-    (err) => {
-      if (err) {
-        errorHandler(err.message);
-      }
-    }
-  );
-  errorHandler("Data stored successfully!!");
 };
 
 exports.createHandler = createHandler;
