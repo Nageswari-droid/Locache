@@ -1,21 +1,18 @@
-const { createHandler } = require("./Functions/createHandler");
-const { readHandler } = require("./Functions/readHandler");
-const { deleteHandler } = require("./Functions/deleteHandler");
+const {Operation} = require("./Operation/OperationClass");
 
 class Main {
   static obj;
   static create(key, value, timeToLive) {
-    createHandler(key, value, timeToLive, this.obj);
+    Operation.createOperation(key, value, timeToLive);
   }
   static read() {
-    readHandler();
+    Operation.readOperation();
   }
   static delete() {
-    deleteHandler();
+    Operation.deleteOperation();
   }
 }
 
 exports.locache = Main;
 
-// const { testing } = require("./testing");
-// testing();
+

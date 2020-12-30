@@ -12,7 +12,6 @@ app.use((req, res, next) => {
 
 app.post("/locachetest", (req, res) => {
   const { key, value, ttl } = req.body;
-//   console.log(key, value, ttl);
   locache.create(key, value, ttl);
   res.json({
     message: "Data added to locache!",

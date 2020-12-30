@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const { errorHandler } = require("../error/error");
+const { GlobalData } = require("../DAO/GlobalData");
 
 const fileName = path.join(__dirname, "..", "data", "dataStore.json");
 
@@ -13,7 +14,7 @@ const fileName = path.join(__dirname, "..", "data", "dataStore.json");
  * @param {*} value
  * @param {*} timeToLive
  */
-const createHandler = (keyArg, valueArg, timeToLive, obj) => {
+const createHandler = (keyArg, valueArg, timeToLive) => {
   const key = keyArg;
   const value = valueArg;
 
@@ -31,7 +32,7 @@ const createHandler = (keyArg, valueArg, timeToLive, obj) => {
           if (fs.existsSync(fileName)) {
             fs.readFile(fileName, "UTF-8", (err, data) => {
               if (data.length === 0 || JSON.parse(data) === " ") {
-                writeHandler({ [key]: value });
+                writeHandler({ [key]: { value: value, expire: false } });
               } else {
                 const parsedData = JSON.parse(data);
                 if (key in parsedData.schema) {
@@ -40,13 +41,13 @@ const createHandler = (keyArg, valueArg, timeToLive, obj) => {
                   );
                 } else {
                   const { schema } = parsedData;
-                  schema[key] = value;
+                  schema[key] = { value: value, expire: false };
                   writeHandler(schema);
                 }
               }
             });
           } else {
-            writeHandler({ [key]: value });
+            writeHandler({ [key]: { value: value, expire: false } });
           }
         }
       }
@@ -59,11 +60,16 @@ const createHandler = (keyArg, valueArg, timeToLive, obj) => {
 };
 
 const writeHandler = (dataObj) => {
+  GlobalData.addItem(dataObj);
   fs.writeFile(
     fileName,
-    JSON.stringify({
-      schema: { ...dataObj },
-    }),
+    JSON.stringify(
+      {
+        schema: { ...dataObj },
+      },
+      null,
+      2
+    ),
     (err) => {
       if (err) {
         errorHandler(err.message);

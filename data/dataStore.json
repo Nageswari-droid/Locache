@@ -1,1 +1,16 @@
-{"schema":{"k2y216u10":{"name":"new name"}}}
+{
+  "schema": {
+    "k2y216u1019": {
+      "value": {
+        "name": "new name"
+      },
+      "expire": false
+    },
+    "k2y216u101qw9": {
+      "value": {
+        "name": "new name"
+      },
+      "expire": false
+    }
+  }
+}
