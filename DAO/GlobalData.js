@@ -1,14 +1,20 @@
 const { errorHandler } = require("../error/error");
-const { FileClass } = require("../fileOperation/FileClass");
-const { Validate } = require("../Validate");
 
 class GlobalData {
   static dataStore = {};
-
+  /**
+   * Add items to the global object
+   * @param {*} dataObj 
+   */
   static addItem = (dataObj) => {
     this.dataStore.root = { ...this.dataStore.root, ...dataObj };
   };
 
+  /**
+   * Read items from the global object
+   * @param {*} key 
+   * @param {*} parsedData 
+   */
   static readItem = async (key, parsedData) => {
     this.dataStore.root = { ...this.dataStore.root, ...parsedData.root };
     if (key in this.dataStore.root) {
@@ -19,6 +25,11 @@ class GlobalData {
     }
   };
 
+  /**
+   * delete items from the global object
+   * @param {*} key 
+   * @param {*} data 
+   */
   static deletItem = async (key, data) => {
     this.dataStore.root = { ...this.dataStore.root, ...data.root };
     if (key in this.dataStore.root) {

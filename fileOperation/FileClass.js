@@ -56,6 +56,10 @@ class FileClass {
     }
   }
 
+  /**
+   * Delete specified key from dataStore
+   * @param {*} deleteObj
+   */
   static async deleteFile(deleteObj){
     if (fs.existsSync(fileName)) {
       await fs.promises

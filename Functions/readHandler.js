@@ -4,6 +4,9 @@ const {Validate} = require("../Validate");
 
 var parsedData = "";
 
+/**
+ * @param {*} key 
+ */
 const readHandler = async (key) => {
   if (Object.keys(GlobalData.dataStore).length === 0) {
     let data = await FileClass.readFile();
@@ -12,7 +15,6 @@ const readHandler = async (key) => {
     console.log(value);
     return value;
   } else {
-    console.log(parsedData);
     return GlobalData.readItem(key, parsedData);
   }
 };

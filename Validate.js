@@ -1,6 +1,12 @@
 const { errorHandler } = require("./error/error");
 
 class Validate {
+  /**
+   * Validate the data string for create operation
+   * @param {*} key 
+   * @param {*} value 
+   * @param {*} data 
+   */
   static async createValidate(key, value, data) {
     if (data.length === 0 || Object.keys(JSON.parse(data)).length === 0) {
       return { [key]: { value: value, expire: false } };
@@ -18,6 +24,11 @@ class Validate {
     }
   }
 
+  /**
+   * Validate the key TTL, parsed data length and key present in the file or not for read operation
+   * @param {*} key 
+   * @param {*} parsedData 
+   */
   static async readValidate(key, parsedData) {
     if (parsedData === " ") {
       return errorHandler(
@@ -35,6 +46,11 @@ class Validate {
     }
   }
 
+  /**
+   * Validate the delete key presence and TTL property to perform delete operation
+   * @param {*} key 
+   * @param {*} parsedData 
+   */
   static async deleteValidate(key, parsedData) {
     if (parsedData === " ") {
       return errorHandler(
