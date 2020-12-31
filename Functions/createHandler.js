@@ -28,8 +28,12 @@ const createHandler = async (keyArg, valueArg, timeToLive) => {
           if (size / 1024 > 16) {
             return errorHandler("Value size should not exceed 16KB");
           } else {
-            GlobalData.addItem({ [key]: { value: value, expire: false } });
-            return await FileClass.writeFile(key, value, lifeTime).then(() => {
+            setTimeout(async () => {
+              GlobalData.addItem({ [key]: { value: value, expire: true } }, key);
+              await FileClass.writeFile(key, value, true);
+            }, lifeTime);
+            GlobalData.addItem({ [key]: { value: value, expire: false } }, key);
+            return await FileClass.writeFile(key, value, false).then(() => {
               console.log("\n \nData stored successfully!!");
               return "Data stored successfully!!";
             });

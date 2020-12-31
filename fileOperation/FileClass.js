@@ -12,9 +12,8 @@ class FileClass {
    * @param {*} value
    * @param {*} lifeTime
    */
-  static async writeFile(key, value, lifeTime) {
-    lifeTime = lifeTime;
-    const dataObj = await this.readFile(key, value);
+  static async writeFile(key, value, flag) {
+    const dataObj = await this.readFile(key, value, flag);
     return await fs.promises.writeFile(
       fileName,
       JSON.stringify(
@@ -32,7 +31,7 @@ class FileClass {
    * @param {*} key
    * @param {*} value
    */
-  static async readFile(key, value) {
+  static async readFile(key, value, flag) {
     if (fs.existsSync(fileName)) {
       let data = await fs.promises
         .readFile(fileName)
@@ -41,15 +40,20 @@ class FileClass {
           console.log(err);
           return "";
         });
-      if (typeof key === "string") {
-        const dataValid = await Validate.createValidate(key, value, data);
+      if (typeof key === "string" && !flag) {
+        const dataValid = await Validate.createValidate(key, value, data, flag);
         return dataValid;
+      } else if (flag && data.length != 0) {
+        const parsedData = JSON.parse(data);
+        const { root } = parsedData;
+        root[key] = { value: value, expire: flag };
+        return root;
       } else {
         return data;
       }
     } else {
       if (key && value) {
-        return { [key]: { value: value, expire: false } };
+        return { [key]: { value: value, expire: flag } };
       } else {
         return errorHandler("File doesn't exists!!");
       }
@@ -60,15 +64,14 @@ class FileClass {
    * Delete specified key from dataStore
    * @param {*} deleteObj
    */
-  static async deleteFile(deleteObj){
+  static async deleteFile(deleteObj) {
     if (fs.existsSync(fileName)) {
-      await fs.promises
-        .writeFile(fileName, JSON.stringify(deleteObj, null, 2));
-      return "Deleted successfully!!"
+      await fs.promises.writeFile(fileName, JSON.stringify(deleteObj, null, 2));
+      return "Deleted successfully!!";
     } else {
       return errorHandler("File doesn't exists!!");
     }
-  };
+  }
 }
 
 exports.FileClass = FileClass;

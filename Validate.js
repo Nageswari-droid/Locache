@@ -7,9 +7,9 @@ class Validate {
    * @param {*} value 
    * @param {*} data 
    */
-  static async createValidate(key, value, data) {
+  static async createValidate(key, value, data, flag) {
     if (data.length === 0 || Object.keys(JSON.parse(data)).length === 0) {
-      return { [key]: { value: value, expire: false } };
+      return { [key]: { value: value, expire: flag } };
     } else {
       const parsedData = JSON.parse(data);
       if (key in parsedData.root) {
@@ -18,7 +18,7 @@ class Validate {
         );
       } else {
         const { root } = parsedData;
-        root[key] = { value: value, expire: false };
+        root[key] = { value: value, expire: flag };
         return root;
       }
     }

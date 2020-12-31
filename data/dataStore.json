@@ -1,48 +1,6 @@
 {
   "root": {
-    "1": {
-      "value": {
-        "name": "ABC"
-      },
-      "expire": false
-    },
-    "12": {
-      "value": {
-        "name": "ABC"
-      },
-      "expire": false
-    },
-    "124": {
-      "value": {
-        "name": "ABC"
-      },
-      "expire": false
-    },
-    "1234": {
-      "value": {
-        "name": "ABC"
-      },
-      "expire": false
-    },
-    "123456": {
-      "value": {
-        "name": "ABC"
-      },
-      "expire": false
-    },
-    "1244578": {
-      "value": {
-        "name": "ABC"
-      },
-      "expire": false
-    },
-    "1244578896": {
-      "value": {
-        "name": "ABC"
-      },
-      "expire": false
-    },
-    "014778478": {
+    "0": {
       "value": {
         "name": "ABC"
       },
