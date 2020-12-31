@@ -1,7 +1,10 @@
 const path = require("path");
+const fs = require("fs");
 const { errorHandler } = require("../error/error");
 const { FileClass } = require("../fileOperation/FileClass");
 const { GlobalData } = require("../DAO/GlobalData");
+
+const fileName = path.join(__dirname, "..", "data", "dataStore.json");
 
 /**
  * Create key-value pair,
@@ -16,7 +19,7 @@ const createHandler = async (keyArg, valueArg, timeToLive) => {
   const key = keyArg;
   const value = valueArg;
 
-  const lifeTime = timeToLive ? timeToLive : 10000;
+  const lifeTime = timeToLive ? timeToLive : 100;
 
   if (typeof key === "string") {
     if (typeof value === "object") {
@@ -28,15 +31,16 @@ const createHandler = async (keyArg, valueArg, timeToLive) => {
           if (size / 1024 > 16) {
             return errorHandler("Value size should not exceed 16KB");
           } else {
-            setTimeout(async () => {
-              GlobalData.addItem({ [key]: { value: value, expire: true } }, key);
-              await FileClass.writeFile(key, value, true);
-            }, lifeTime);
-            GlobalData.addItem({ [key]: { value: value, expire: false } }, key);
-            return await FileClass.writeFile(key, value, false).then(() => {
-              console.log("\n \nData stored successfully!!");
-              return "Data stored successfully!!";
-            });
+            if (fs.existsSync(fileName)) {
+              const fileSize = fs.statSync(fileName).size;
+              if (fileSize / 1073741824 <= 1) {
+                fileOperations(key, value, lifeTime);
+              } else {
+                return errorHandler("File size exceeded 1GB!!");
+              }
+            } else {
+              fileOperations(key, value, lifeTime);
+            }
           }
         }
       } else {
@@ -48,6 +52,18 @@ const createHandler = async (keyArg, valueArg, timeToLive) => {
   } else {
     return errorHandler("Key datatype should be string!");
   }
+};
+
+const fileOperations = async (key, value, lifeTime) => {
+  setTimeout(async () => {
+    GlobalData.addItem({ [key]: { value: value, expire: true } });
+    await FileClass.writeFile(key, value, true);
+  }, lifeTime * 1000);
+  GlobalData.addItem({ [key]: { value: value, expire: false } });
+  return await FileClass.writeFile(key, value, false).then(() => {
+    console.log("\n \nData stored successfully!!");
+    return "Data stored successfully!!";
+  });
 };
 
 exports.createHandler = createHandler;

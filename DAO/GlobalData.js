@@ -6,7 +6,7 @@ class GlobalData {
    * Add items to the global object
    * @param {*} dataObj
    */
-  static addItem = (dataObj, key) => {
+  static addItem = (dataObj) => {
     this.dataStore.root = { ...this.dataStore.root, ...dataObj };
   };
 
