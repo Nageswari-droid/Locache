@@ -27,6 +27,46 @@ class FileClass {
   }
 
   /**
+   * Updates expire status of each key
+   * @param {*} key 
+   * @param {*} flag 
+   */
+  static async updateFile(key, flag) {
+    if (fs.existsSync(fileName)) {
+      let data = await fs.promises
+        .readFile(fileName)
+        .then((res) => res.toString("utf-8"))
+        .catch((err) => {
+          console.log(err);
+          return "";
+        });
+
+      const parsedData = data.length === 0 ? " " : JSON.parse(data);
+      if (parsedData.length !== 0) {
+        if (key in parsedData.root) {
+          parsedData.root[key].expire = flag;
+          return await fs.promises.writeFile(
+            fileName,
+            JSON.stringify(
+              {
+                root: { ...parsedData.root },
+              },
+              null,
+              2
+            )
+          );
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  /**
    * Reads the JSON data file and returns the existing object when client create a new object
    * @param {*} key
    * @param {*} value

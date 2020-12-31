@@ -4,9 +4,9 @@
   "description": "Local storage with Create, Read and Delete operations",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon Main.js",
-    "testAgent" : "nodemon testingServer.js"
+    "testAgent": "nodemon testingServer.js"
   },
   "nodemonConfig": {
     "ignore": [
@@ -31,6 +31,8 @@
   },
   "homepage": "https://github.com/Nageswari-droid/Freshworks-backend-problem#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.19",
+    "@types/node": "^14.14.17",
     "nodemon": "^2.0.6"
   },
   "dependencies": {

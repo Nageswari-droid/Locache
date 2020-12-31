@@ -13,6 +13,7 @@ const deleteHandler = async (key) => {
     let deleteObj = await GlobalData.deletItem(key, parsedData);
     let msg = await FileClass.deleteFile(deleteObj);
     console.log(msg);
+    return msg;
   }
 };
 

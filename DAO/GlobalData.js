@@ -11,6 +11,19 @@ class GlobalData {
   };
 
   /**
+   * Updates the expire status once its TTL exceeded
+   * @param {*} key 
+   * @param {*} flag 
+   */
+  static updateItem = (key, flag) => {
+    if (key in this.dataStore.root) {
+      this.dataStore.root[key].expire = flag;
+    } else {
+      return null;
+    }
+  };
+
+  /**
    * Read items from the global object
    * @param {*} key
    * @param {*} parsedData

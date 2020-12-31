@@ -34,12 +34,12 @@ const createHandler = async (keyArg, valueArg, timeToLive) => {
             if (fs.existsSync(fileName)) {
               const fileSize = fs.statSync(fileName).size;
               if (fileSize / 1073741824 <= 1) {
-                fileOperations(key, value, lifeTime);
+                return fileOperations(key, value, lifeTime);
               } else {
                 return errorHandler("File size exceeded 1GB!!");
               }
             } else {
-              fileOperations(key, value, lifeTime);
+              return fileOperations(key, value, lifeTime);
             }
           }
         }
@@ -56,14 +56,20 @@ const createHandler = async (keyArg, valueArg, timeToLive) => {
 
 const fileOperations = async (key, value, lifeTime) => {
   setTimeout(async () => {
-    GlobalData.addItem({ [key]: { value: value, expire: true } });
-    await FileClass.writeFile(key, value, true);
+    GlobalData.updateItem(key, true);
+    await FileClass.updateFile(key, true).catch((err) => {
+      console.log(err);
+    });
   }, lifeTime * 1000);
   GlobalData.addItem({ [key]: { value: value, expire: false } });
-  return await FileClass.writeFile(key, value, false).then(() => {
-    console.log("\n \nData stored successfully!!");
-    return "Data stored successfully!!";
-  });
+  return await FileClass.writeFile(key, value, false)
+    .then(() => {
+      console.log("\n \nData stored successfully!!");
+      return "Data stored successfully!!";
+    })
+    .catch((err) => {
+      return errorHandler(err);
+    });
 };
 
 exports.createHandler = createHandler;

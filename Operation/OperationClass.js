@@ -26,7 +26,7 @@ class Operation{
      * @param {*} key 
      */
     static async deleteOperation(key){
-        await deleteHandler(key);
+        return await deleteHandler(key);
     }
 }
 

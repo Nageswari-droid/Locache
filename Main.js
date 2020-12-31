@@ -25,7 +25,7 @@ class Main {
    * @param {*} key 
    */
   static async delete(key) {
-    await Operation.deleteOperation(key);
+    return await Operation.deleteOperation(key);
   }
 }
 
