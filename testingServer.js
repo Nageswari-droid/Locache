@@ -1,13 +1,11 @@
 const express = require("express");
 const app = express();
-const { locache } = require("./Main");
+const { Locache } = require("./Main");
 
-var obj = new locache();
+const PORT = process.env.PORT || 4200;
+
+var obj = new Locache(PORT);
 app.use(express.json());
-// app.use((req, res, next) => {
-//   req.locache = locache;
-//   next();
-// });
 
 app.use((req, res, next) => {
   res.setHeader("Content-type", "application/json");
@@ -18,9 +16,9 @@ app.use((req, res, next) => {
 app.post("/create", async (req, res) => {
   const { filepath, key, value, ttl } = req.body;
   if (filepath) {
-    locache.setFileName(filepath);
+    Locache.setFileName(filepath);
   } else {
-    locache.setFileName(" ");
+    Locache.setFileName(" ");
   }
   try {
     await obj.create(key, value, ttl);
@@ -62,4 +60,4 @@ app.get("/delete/:key", async (req, res) => {
   }
 });
 
-app.listen(4200);
+app.listen(PORT);

@@ -8,6 +8,7 @@ class GlobalData {
   static dataStore = {};
 
   /**
+   * @param {*} filePath
    * To set a file name for the data store
    */
   static setDataStoreFileName(filePath) {

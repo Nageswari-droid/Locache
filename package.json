@@ -4,7 +4,7 @@
   "description": "Local storage with Create, Read and Delete operations",
   "main": "main.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --silent",
     "start": "nodemon Main.js",
     "testAgent": "nodemon testingServer.js"
   },

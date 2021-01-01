@@ -1,13 +1,9 @@
-const { locache } = require("../Main");
+const { Locache } = require("../Main");
 const fs = require("fs");
 const path = require("path");
 
 const fileName = path.join(__dirname, ".", "testingFile", "test.json");
-afterAll(async () => {
-  return await fs.promises.rm(
-    path.join(__dirname, "..", "..", "..", "..", "Desktop", "dataStore.json")
-  );
-});
+const obj = new Locache("");
 
 describe("Create new item test case", () => {
   test("Positive Test Case - create a new item in locache", async () => {
@@ -16,7 +12,7 @@ describe("Create new item test case", () => {
       name: "Tester",
     };
     const ttl = 5;
-    const cache = await locache
+    const cache = await obj
       .create(testKey, value, ttl)
       .then((res) => {
         return "Success";
@@ -32,7 +28,7 @@ describe("Create new item test case", () => {
       name: "Tester",
     };
     const ttl = 5;
-    const err = await locache.create(testKey, value, ttl).catch((err) => {
+    const err = await obj.create(testKey, value, ttl).catch((err) => {
       return "Error";
     });
 
@@ -44,7 +40,7 @@ describe("Create new item test case", () => {
       name: "Tester",
     };
     const ttl = 5;
-    const err = await locache.create(testKey, value, ttl).catch((err) => {
+    const err = await obj.create(testKey, value, ttl).catch((err) => {
       return "Error";
     });
 
@@ -56,17 +52,7 @@ describe("Create new item test case", () => {
       name: "Tester",
     };
     const ttl = 5;
-    const err = await locache.create(testKey, value, ttl).catch((err) => {
-      return "Error";
-    });
-
-    expect(err).toBeTruthy();
-  });
-  test("Negative test case - Value should be in JSON", async () => {
-    const testKey = "1247";
-    const value = "Good";
-    const ttl = 5;
-    const err = await locache.create(testKey, value, ttl).catch((err) => {
+    const err = await obj.create(testKey, value, ttl).catch((err) => {
       return "Error";
     });
 
@@ -83,7 +69,7 @@ describe("Create new item test case", () => {
       });
     valueParse = JSON.parse(value);
     const ttl = 5;
-    const err = await locache.create(testKey, valueParse, ttl).catch((err) => {
+    const err = await obj.create(testKey, valueParse, ttl).catch((err) => {
       return "Error";
     });
     expect(err).toBeTruthy();
@@ -92,7 +78,7 @@ describe("Create new item test case", () => {
     const testKey = "1247";
     const value = "Good";
     const ttl = "4";
-    const err = await locache.create(testKey, value, ttl).catch((err) => {
+    const err = await obj.create(testKey, value, ttl).catch((err) => {
       return "Error";
     });
 

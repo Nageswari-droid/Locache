@@ -4,6 +4,25 @@ const { GlobalData } = require("./DAO/GlobalData");
 
 class Main {
   static fileDefault = path.join(__dirname, "..", "data");
+
+  constructor(filepath) {
+    if (typeof filepath === "string" || typeof filepath === "undefined") {
+      let fileDefaultNew = path.join(__dirname, "..", "data");
+
+      if (!filepath) {
+        filepath = fileDefaultNew;
+      }
+      const dsFileName = GlobalData.dataStoreFileName;
+      if (!dsFileName) {
+        GlobalData.setDataStoreFileName(filepath);
+      }
+    }
+  }
+
+  /**
+   * To create user defined file path
+   * @param {*} filepath
+   */
   static setFileName(filepath) {
     if (filepath === " ") {
       filepath = this.fileDefault;
@@ -41,4 +60,4 @@ class Main {
   }
 }
 
-exports.locache = Main;
+exports.Locache = Main;
