@@ -1,7 +1,26 @@
 const { errorHandler } = require("../error/error");
+const shortid = require("shortid");
+const fs = require("fs");
+const path = require("path");
 
 class GlobalData {
+  static dataStoreFileName;
   static dataStore = {};
+
+  /**
+   * To set a file name for the data store
+   */
+  static setDataStoreFileName(filePath) {
+    if (!fs.existsSync(filePath)) {
+      fs.mkdir(filePath, (err) => {
+        if (err) {
+          throw Error(err);
+        }
+      });
+    }
+    this.dataStoreFileName = path.join(filePath, shortid.generate() + ".json");
+  }
+
   /**
    * Add items to the global object
    * @param {*} dataObj
@@ -12,8 +31,8 @@ class GlobalData {
 
   /**
    * Updates the expire status once its TTL exceeded
-   * @param {*} key 
-   * @param {*} flag 
+   * @param {*} key
+   * @param {*} flag
    */
   static updateItem = (key, flag) => {
     if (key in this.dataStore.root) {

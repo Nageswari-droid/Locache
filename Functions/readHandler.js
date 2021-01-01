@@ -8,7 +8,8 @@ var parsedData = "";
  * @param {*} key
  */
 const readHandler = async (key) => {
-  let data = await FileClass.readFile();
+  const fileName = GlobalData.dataStoreFileName;
+  let data = await FileClass.readFile(fileName);
   parsedData = data.length !== 0 ? JSON.parse(data) : " ";
   let value = await Validate.readValidate(key, parsedData);
   GlobalData.readItem(key, parsedData);

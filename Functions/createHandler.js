@@ -4,8 +4,6 @@ const { errorHandler } = require("../error/error");
 const { FileClass } = require("../fileOperation/FileClass");
 const { GlobalData } = require("../DAO/GlobalData");
 
-const fileName = path.join(__dirname, "..", "data", "dataStore.json");
-
 /**
  * Create key-value pair,
  * key length should not exceed 32 characters,
@@ -18,9 +16,9 @@ const fileName = path.join(__dirname, "..", "data", "dataStore.json");
 const createHandler = async (keyArg, valueArg, timeToLive) => {
   const key = keyArg;
   const value = valueArg;
+  const fileName = GlobalData.dataStoreFileName;
 
   const lifeTime = timeToLive ? timeToLive : 100;
-
   if (typeof key === "string") {
     if (typeof value === "object") {
       if (typeof lifeTime === "number") {
@@ -34,12 +32,12 @@ const createHandler = async (keyArg, valueArg, timeToLive) => {
             if (fs.existsSync(fileName)) {
               const fileSize = fs.statSync(fileName).size;
               if (fileSize / 1073741824 <= 1) {
-                return fileOperations(key, value, lifeTime);
+                return fileOperations(fileName, key, value, lifeTime);
               } else {
                 return errorHandler("File size exceeded 1GB!!");
               }
             } else {
-              return fileOperations(key, value, lifeTime);
+              return fileOperations(fileName,key, value, lifeTime);
             }
           }
         }
@@ -54,15 +52,15 @@ const createHandler = async (keyArg, valueArg, timeToLive) => {
   }
 };
 
-const fileOperations = async (key, value, lifeTime) => {
+const fileOperations = async (fileName, key, value, lifeTime) => {
   setTimeout(async () => {
     GlobalData.updateItem(key, true);
-    await FileClass.updateFile(key, true).catch((err) => {
+    await FileClass.updateFile(fileName, key, true).catch((err) => {
       console.log(err);
     });
   }, lifeTime * 1000);
   GlobalData.addItem({ [key]: { value: value, expire: false } });
-  return await FileClass.writeFile(key, value, false)
+  return await FileClass.writeFile(fileName, key, value, false)
     .then(() => {
       console.log("\n \nData stored successfully!!");
       return "Data stored successfully!!";

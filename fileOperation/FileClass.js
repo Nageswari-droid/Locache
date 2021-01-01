@@ -2,8 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { Validate } = require("../Validate");
 const { errorHandler } = require("../error/error");
-
-const fileName = path.join(__dirname, "..", "data", "dataStore.json");
+const { GlobalData } = require("../DAO/GlobalData");
 
 class FileClass {
   /**
@@ -12,10 +11,10 @@ class FileClass {
    * @param {*} value
    * @param {*} lifeTime
    */
-  static async writeFile(key, value, flag) {
-    const dataObj = await this.readFile(key, value, flag);
+  static async writeFile(dataStoreFileName, key, value, flag) {
+    const dataObj = await this.readFile(dataStoreFileName, key, value, flag);
     return await fs.promises.writeFile(
-      fileName,
+      dataStoreFileName,
       JSON.stringify(
         {
           root: { ...dataObj },
@@ -28,13 +27,13 @@ class FileClass {
 
   /**
    * Updates expire status of each key
-   * @param {*} key 
-   * @param {*} flag 
+   * @param {*} key
+   * @param {*} flag
    */
-  static async updateFile(key, flag) {
-    if (fs.existsSync(fileName)) {
+  static async updateFile(dataStoreFileName, key, flag) {
+    if (fs.existsSync(dataStoreFileName)) {
       let data = await fs.promises
-        .readFile(fileName)
+        .readFile(dataStoreFileName)
         .then((res) => res.toString("utf-8"))
         .catch((err) => {
           console.log(err);
@@ -46,7 +45,7 @@ class FileClass {
         if (key in parsedData.root) {
           parsedData.root[key].expire = flag;
           return await fs.promises.writeFile(
-            fileName,
+            dataStoreFileName,
             JSON.stringify(
               {
                 root: { ...parsedData.root },
@@ -71,10 +70,10 @@ class FileClass {
    * @param {*} key
    * @param {*} value
    */
-  static async readFile(key, value, flag) {
-    if (fs.existsSync(fileName)) {
+  static async readFile(dataStoreFileName, key, value, flag) {
+    if (fs.existsSync(dataStoreFileName)) {
       let data = await fs.promises
-        .readFile(fileName)
+        .readFile(dataStoreFileName)
         .then((res) => res.toString("utf-8"))
         .catch((err) => {
           console.log(err);
@@ -104,9 +103,12 @@ class FileClass {
    * Delete specified key from dataStore
    * @param {*} deleteObj
    */
-  static async deleteFile(deleteObj) {
-    if (fs.existsSync(fileName)) {
-      await fs.promises.writeFile(fileName, JSON.stringify(deleteObj, null, 2));
+  static async deleteFile(dataStoreFileName, deleteObj) {
+    if (fs.existsSync(dataStoreFileName)) {
+      await fs.promises.writeFile(
+        dataStoreFileName,
+        JSON.stringify(deleteObj, null, 2)
+      );
       return "Deleted successfully!!";
     } else {
       return errorHandler("File doesn't exists!!");

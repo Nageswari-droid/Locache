@@ -2,11 +2,12 @@ const express = require("express");
 const app = express();
 const { locache } = require("./Main");
 
+var obj = new locache();
 app.use(express.json());
-app.use((req, res, next) => {
-  req.locache = locache;
-  next();
-});
+// app.use((req, res, next) => {
+//   req.locache = locache;
+//   next();
+// });
 
 app.use((req, res, next) => {
   res.setHeader("Content-type", "application/json");
@@ -15,10 +16,14 @@ app.use((req, res, next) => {
 });
 
 app.post("/create", async (req, res) => {
-  const { key, value, ttl } = req.body;
-
+  const { filepath, key, value, ttl } = req.body;
+  if (filepath) {
+    locache.setFileName(filepath);
+  } else {
+    locache.setFileName(" ");
+  }
   try {
-    await req.locache.create(key, value, ttl);
+    await obj.create(key, value, ttl);
     res.status(201).json({
       message: "Data added to locache!",
     });
@@ -32,7 +37,7 @@ app.post("/create", async (req, res) => {
 app.get("/read/:key", async (req, res) => {
   const key = req.params.key;
   try {
-    let value = await req.locache.read(key);
+    let value = await obj.read(key);
     res.status(201).json({
       [key]: value,
     });
@@ -46,9 +51,9 @@ app.get("/read/:key", async (req, res) => {
 app.get("/delete/:key", async (req, res) => {
   const key = req.params.key;
   try {
-    await req.locache.delete(key);
+    await obj.delete(key);
     res.status(201).json({
-      message : `${key} deleted successfully!`
+      message: `${key} deleted successfully!`,
     });
   } catch (err) {
     res.status(500).json({

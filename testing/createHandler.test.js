@@ -3,10 +3,9 @@ const fs = require("fs");
 const path = require("path");
 
 const fileName = path.join(__dirname, ".", "testingFile", "test.json");
-
 afterAll(async () => {
   return await fs.promises.rm(
-    path.join(__dirname, "..", "/data/dataStore.json")
+    path.join(__dirname, "..", "..", "..", "..", "Desktop", "dataStore.json")
   );
 });
 
@@ -89,7 +88,7 @@ describe("Create new item test case", () => {
     });
     expect(err).toBeTruthy();
   });
-  test("Negative test case - TTL datatype should be an integer!", async () =>{
+  test("Negative test case - TTL datatype should be an integer!", async () => {
     const testKey = "1247";
     const value = "Good";
     const ttl = "4";
@@ -98,5 +97,5 @@ describe("Create new item test case", () => {
     });
 
     expect(err).toBeTruthy();
-  })
+  });
 });
