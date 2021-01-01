@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --silent",
     "start": "nodemon Main.js",
-    "testAgent": "nodemon testingServer.js"
+    "testAgent": "node ./__tests__/testingServer.js"
   },
   "nodemonConfig": {
     "ignore": [

@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "7cbe83a9-5eaf-4bc2-b9a6-ac593ccdf87c",
+		"name": "locache",
+		"description": "Postman collection for testing locache",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"filepath\" : \"DYNAMIC_FILE_PATH\",\r\n    \"key\": \"DYNAMIC_KEY\",\r\n    \"value\": {\r\n        \"KEY\": \"VALUE\"\r\n    },\r\n    \"ttl\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4200/create",
+					"host": [
+						"localhost"
+					],
+					"port": "4200",
+					"path": [
+						"create"
+					]
+				},
+				"description": "To create a new key value pair in locache"
+			},
+			"response": []
+		},
+		{
+			"name": "read",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4200/read/${KEY}",
+					"host": [
+						"localhost"
+					],
+					"port": "4200",
+					"path": [
+						"read",
+						"${KEY}"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "To read an existing key from locache"
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4200/delete/${KEY}",
+					"host": [
+						"localhost"
+					],
+					"port": "4200",
+					"path": [
+						"delete",
+						"${KEY}"
+					]
+				},
+				"description": "TO delete a key from locache\r\n"
+			},
+			"response": []
+		}
+	]
+}

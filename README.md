@@ -2,7 +2,7 @@
 
 A simple datastore based caching application developed in [Node JS](https://nodejs.org).
 
-> Developed as part of [freshworks](https://freshworks.com) graduate trainee interview drive
+> Developed for [freshworks](https://freshworks.com) graduate trainee interview drive
 
 ## Guidelines for using the library
 
@@ -40,19 +40,21 @@ const objectName = new Locache(filepath); //Filepath is optional
 ```
 
 **Adding key-value pair to the datastore**
-  - Key, Value, Time to live(optional) are the parameters to add new item in datastore.
-  
+
+- Key, Value, Time to live(optional) are the parameters to add new item in datastore.
+
 ```
 const cache = await objectName
       .create(key, value, timeToLive)
       .catch((err) => {
-        throw new Error(err);        
+        throw new Error(err);
       });
 ```
 
 **Reading value from datastore**
-  - key is the only parameter to read an item from datastore
-  
+
+- key is the only parameter required to read an item from datastore
+
 ```
 const value = await objectName
       .read(key)
@@ -60,13 +62,14 @@ const value = await objectName
         return res;
       })
      .catch((err) => {
-        throw new Error(err);        
+        throw new Error(err);
       });
 ```
 
 **Deleting value from datastore**
-   - key is the only parameter to delete an item from datastore
-  
+
+- key is the only parameter required to delete an item from datastore
+
 ```
 const value = await objectName
       .delete(key)
@@ -74,7 +77,23 @@ const value = await objectName
         return res;
       })
      .catch((err) => {
-        throw new Error(err);        
+        throw new Error(err);
       });
 ```
-  
+
+# Testing
+
+To run the test suite for the library, use the following command
+
+```
+npm test
+```
+
+A REST API based test server is also included in the repo to pass a series of test inputs
+
+```
+// To run the test server
+npm run testAgent
+```
+
+For testing the REST agent using postman, import the collection `locache.postman_collection.json` included in the `__tests__` folder

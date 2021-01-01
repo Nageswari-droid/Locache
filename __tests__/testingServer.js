@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const { Locache } = require("./Main");
+const { Locache } = require("../Main");
 
 const PORT = process.env.PORT || 4200;
 
@@ -46,7 +46,7 @@ app.get("/read/:key", async (req, res) => {
   }
 });
 
-app.get("/delete/:key", async (req, res) => {
+app.delete("/delete/:key", async (req, res) => {
   const key = req.params.key;
   try {
     await obj.delete(key);
