@@ -2,8 +2,6 @@
 
 A simple datastore based caching application developed in [Node JS](https://nodejs.org).
 
-> Developed for [freshworks](https://freshworks.com) graduate trainee interview drive
-
 ## Guidelines for using the library
 
 The library can be imported in two ways
