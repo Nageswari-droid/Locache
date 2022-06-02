@@ -2,8 +2,9 @@
   "name": "locache",
   "version": "1.0.0",
   "description": "Local storage with Create, Read and Delete operations",
-  "main": "main.js",
+  "main": "Main.js",
   "scripts": {
+    "start": "node Main.js",
     "test": "jest --silent",
     "testAgent": "node ./__tests__/testingServer.js"
   },
